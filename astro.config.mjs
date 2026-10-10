@@ -9,7 +9,7 @@ const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 
 // Deployed as a GitHub Pages *project* site: https://bitsnexus.github.io/VideoTester/
 const site = env.PUBLIC_SITE_URL || 'https://bitsnexus.github.io';
-const base = env.PUBLIC_BASE_PATH || '/VideoTester';
+const base = env.PUBLIC_BASE_PATH || '/Video-Tester';
 
 export default defineConfig({
   site,
