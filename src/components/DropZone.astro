@@ -1,0 +1,136 @@
+---
+import Icon from './Icon.astro';
+import { ACCEPT } from '../lib/file-info';
+---
+
+<section id="test" aria-labelledby="test-heading" class="relative mx-auto mt-8 flex max-w-7xl flex-col items-center px-4 sm:px-6" data-dropzone-section>
+  <h2 id="test-heading" class="sr-only">Test Your Video File</h2>
+
+  <!-- Mode switch: a local file or a link -->
+  <div role="tablist" aria-label="What do you want to test?" class="mb-8 inline-flex rounded-full bg-black/45 p-1 ring-1 ring-white/15 backdrop-blur-sm" data-mode-tabs>
+    <button type="button" role="tab" id="tab-file" aria-controls="panel-file" aria-selected="true" tabindex="0" data-mode-tab="file" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white/80 transition-colors hover:text-white aria-selected:bg-white aria-selected:text-gray-900 sm:px-5">
+      <Icon name="film" class="size-4" /> Video file
+    </button>
+    <button type="button" role="tab" id="tab-url" aria-controls="panel-url" aria-selected="false" tabindex="-1" data-mode-tab="url" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white/80 transition-colors hover:text-white aria-selected:bg-white aria-selected:text-gray-900 sm:px-5">
+      <Icon name="link" class="size-4" /> Video URL
+    </button>
+  </div>
+
+  <div id="panel-file" role="tabpanel" aria-labelledby="tab-file" class="flex w-full flex-col items-center" data-mode-panel="file">
+
+  <!-- Decorative floating cards, desktop only (like the LimeWire hero). -->
+  <div aria-hidden="true" class="pointer-events-none absolute top-1/2 left-6 hidden w-60 -translate-y-1/2 -rotate-3 rounded-xl bg-white p-4 shadow-(--shadow-float) xl:block">
+    <p class="flex items-center gap-2 text-sm font-bold text-pass"><Icon name="circle-check" class="size-5" /> Video is playable</p>
+    <p class="mt-2 text-xs text-gray-500">1920 × 1080 · 16:9 · 02:34</p>
+    <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100"><div class="h-full w-4/5 rounded-full bg-linear-to-r from-leaf to-lime"></div></div>
+  </div>
+  <div aria-hidden="true" class="pointer-events-none absolute top-1/2 right-6 hidden w-60 -translate-y-1/3 rotate-2 rounded-xl bg-white p-4 shadow-(--shadow-float) xl:block">
+    <p class="text-xs font-bold tracking-wide text-gray-500 uppercase">Playback trace</p>
+    <p class="mt-2 font-mono text-xs text-gray-900">0.00s → 0.50s → 1.02s → 1.53s</p>
+    <p class="mt-3 flex items-center gap-1.5 text-xs font-bold text-pass"><Icon name="check" class="size-4" /> Frames decoded</p>
+  </div>
+
+  <div class="group/drop relative size-[272px] sm:size-[309px]" data-dropzone>
+    <!-- Ring -->
+    <svg
+      class="absolute inset-0 size-full overflow-visible transition-transform duration-[1050ms] ease-(--ease-spring) group-hover/drop:scale-105 group-data-[dragging]/drop:scale-105 motion-reduce:transition-none"
+      viewBox="0 0 309 309"
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="ring-gradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#d2f54d"></stop>
+          <stop offset="1" stop-color="#1a9e5d"></stop>
+        </linearGradient>
+      </defs>
+      <circle cx="154.5" cy="154.5" r="152" fill="none" stroke="rgb(255 255 255 / 0.2)" stroke-width="3"></circle>
+      <circle
+        class="origin-center rotate-[135deg] [transform-box:fill-box] transition-[stroke-dashoffset] duration-700 group-data-[dragging]/drop:[stroke-dashoffset:0]"
+        cx="154.5"
+        cy="154.5"
+        r="152"
+        fill="none"
+        stroke="url(#ring-gradient)"
+        stroke-width="4"
+        stroke-linecap="round"
+        pathLength="100"
+        stroke-dasharray="100"
+        stroke-dashoffset="25"></circle>
+    </svg>
+
+    <label
+      for="file-input"
+      class="absolute inset-[14px] flex cursor-pointer flex-col items-center justify-center rounded-full bg-linear-to-b from-white to-gray-50 px-8 text-center shadow-lg transition-transform duration-[1050ms] ease-(--ease-spring) group-hover/drop:scale-[1.03] group-data-[dragging]/drop:scale-[1.03] group-data-[dragging]/drop:ring-4 group-data-[dragging]/drop:ring-lime has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-lime has-[:focus-visible]:outline-solid motion-reduce:transition-none"
+    >
+      <input id="file-input" type="file" accept={ACCEPT} class="sr-only" aria-describedby="drop-help privacy-note" data-file-input />
+      <span class="grid size-11 place-items-center rounded-full bg-brand text-white shadow-md">
+        <Icon name="cloud-upload" class="size-5" />
+      </span>
+      <span class="mt-4 text-[15px] leading-snug font-medium text-gray-700">
+        <span class="sr-only">Choose a video file to test. </span>Click or drag-and-drop<br />your video here
+      </span>
+      <span class="mt-1.5 text-sm font-bold text-link underline underline-offset-2" aria-hidden="true">or browse your files</span>
+      <span id="drop-help" class="mt-4 text-xs text-gray-500">MP4, WebM, MOV, MKV, AVI, WMV, MPEG &amp; more</span>
+    </label>
+  </div>
+
+  <button type="button" class="btn btn-primary btn-lg mt-8" data-action="browse">
+    <Icon name="folder-open" class="size-5" />
+    Browse files
+  </button>
+
+  <p id="drop-message" class="mt-4 max-w-md rounded-xl bg-warn-bg px-4 py-2.5 text-center text-sm font-medium text-warn ring-1 ring-warn-line" role="alert" hidden></p>
+
+  <p id="privacy-note" class="mt-5 flex max-w-lg items-start gap-2 text-center text-sm text-white/80 sm:items-center">
+    <Icon name="lock" class="mt-0.5 size-4 shrink-0 text-lime sm:mt-0" />
+    <span>Your video is processed locally in your browser. The file is not uploaded to our server.</span>
+  </p>
+  </div>
+
+  <div id="panel-url" role="tabpanel" aria-labelledby="tab-url" class="flex w-full flex-col items-center" hidden data-mode-panel="url">
+    <form class="w-full max-w-2xl" novalidate data-url-form>
+      <label for="video-url" class="mb-3 block text-center text-base font-bold text-white">Is this video open to play on any site?</label>
+      <div class="flex items-center gap-2 rounded-full bg-white p-1.5 pl-4 shadow-lg ring-4 ring-white/10 transition-shadow focus-within:ring-lime sm:p-2 sm:pl-5">
+        <Icon name="link" class="size-5 shrink-0 text-gray-400" />
+        <input
+          id="video-url"
+          type="url"
+          inputmode="url"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="https://example.com/video.mp4"
+          class="min-w-0 flex-1 bg-transparent py-2 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus-visible:outline-none"
+          aria-describedby="url-help url-error"
+          data-url-input
+        />
+        <button type="submit" class="btn btn-primary shrink-0 sm:px-6 sm:py-3 sm:text-base">
+          <span class="hidden sm:inline">Check URL</span><span class="sm:hidden">Check</span>
+          <Icon name="arrow-right" class="size-4" />
+        </button>
+      </div>
+      <p id="url-error" class="mt-3 rounded-xl bg-fail-bg px-4 py-2.5 text-center text-sm font-medium text-fail ring-1 ring-fail-line" role="alert" hidden data-url-error></p>
+      <p id="url-help" class="mt-4 text-center text-sm text-white/75">
+        Paste a direct link to a video file (MP4, WebM, MOV…) or an HLS stream. We check that it loads, decodes and plays from another website, works without cookies (CORS) and supports seeking.
+        <button type="button" class="font-bold text-lime underline underline-offset-2 hover:text-white" data-action="url-example">Try an example</button>
+      </p>
+    </form>
+    <p class="mt-5 flex max-w-lg items-start gap-2 text-center text-sm text-white/80 sm:items-center">
+      <Icon name="shield-check" class="mt-0.5 size-4 shrink-0 text-lime sm:mt-0" />
+      <span>The video streams straight from its own server into your browser — nothing is uploaded, proxied or stored.</span>
+    </p>
+  </div>
+</section>
+
+<!-- Whole-page drop overlay, shown while a file is dragged over the window. -->
+<div
+  class="pointer-events-none fixed inset-0 z-50 hidden place-items-center bg-ink/70 p-6 backdrop-blur-sm data-[visible]:grid"
+  data-drop-overlay
+  aria-hidden="true"
+>
+  <div class="grid place-items-center gap-3 rounded-3xl border-2 border-dashed border-lime px-10 py-12 text-center text-white">
+    <span class="grid size-14 place-items-center rounded-full bg-brand"><Icon name="cloud-upload" class="size-7" /></span>
+    <p class="text-2xl font-bold">Drop your video to test it</p>
+    <p class="text-sm text-white/75">It stays on your device — nothing is uploaded.</p>
+  </div>
+</div>

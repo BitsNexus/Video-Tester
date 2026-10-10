@@ -1,0 +1,146 @@
+---
+/** SEO/help content on the light part of the page: formats, how it works, FAQ. */
+import Icon from './Icon.astro';
+import { FORMATS } from '../data/formats';
+import { FAQ } from '../data/faq';
+
+const SUPPORT_LABEL = { good: 'Widely supported', mixed: 'Depends on codec/browser', poor: 'Rarely supported' } as const;
+const SUPPORT_STATUS = { good: 'pass', mixed: 'warn', poor: 'fail' } as const;
+const SUPPORT_GLYPH = { good: '✓', mixed: '⚠', poor: '✕' } as const;
+
+const howSteps = [
+  { icon: 'folder-open', title: 'You pick a file', text: 'Any extension is accepted. Nothing is rejected just because the name looks unfamiliar.' },
+  { icon: 'lock', title: 'It stays local', text: 'A private blob: URL points your browser’s video player at the file. No upload, no server.' },
+  { icon: 'file-search', title: 'Header check', text: 'The first bytes reveal the container and codecs — used to explain results, never to fake them.' },
+  { icon: 'scan-eye', title: 'Metadata & frames', text: 'The browser must read duration and dimensions, then decode the first frame of real video data.' },
+  { icon: 'play', title: 'Real playback', text: 'play() is called and the clock is watched: 0.00s → 0.50s → 1.02s… with decoded frames counted.' },
+  { icon: 'list-checks', title: 'Honest verdict', text: 'Playable, could not be played, or partially tested — with the evidence and a plain-English reason.' },
+];
+---
+
+<div class="on-light bg-gray-25">
+  <!-- Supported formats -->
+  <section id="formats" class="mx-auto max-w-7xl scroll-mt-6 px-4 py-20 sm:px-6" aria-labelledby="formats-heading">
+    <div class="max-w-2xl">
+      <span class="eyebrow">Formats</span>
+      <h2 id="formats-heading" class="mt-4 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">Supported Video Formats</h2>
+      <p class="mt-4 text-lg text-gray-600">
+        You can test any file. Whether it plays depends on the <strong class="font-bold text-gray-900">container</strong> and the <strong class="font-bold text-gray-900">codecs</strong> inside it — and on your browser.
+        The last column is what <em>your</em> browser says about each type.
+      </p>
+    </div>
+
+    <div class="card mt-10 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <caption class="sr-only">Common video formats and typical browser support</caption>
+          <thead class="bg-gray-50 text-xs font-bold tracking-wide text-gray-500 uppercase">
+            <tr>
+              <th scope="col" class="px-5 py-3">Format</th>
+              <th scope="col" class="px-5 py-3">Common codecs</th>
+              <th scope="col" class="px-5 py-3">Typical browser support</th>
+              <th scope="col" class="px-5 py-3">Your browser says</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {
+              FORMATS.map((format) => (
+                <tr class="align-top">
+                  <th scope="row" class="px-5 py-4 font-normal">
+                    <span class="block font-bold text-gray-900">{format.name}</span>
+                    <span class="block text-xs text-gray-500">{format.extensions} · {format.container}</span>
+                  </th>
+                  <td class="px-5 py-4 text-gray-700">{format.codecs}</td>
+                  <td class="px-5 py-4">
+                    <span class="status" data-status={SUPPORT_STATUS[format.support]}>
+                      {SUPPORT_GLYPH[format.support]} {SUPPORT_LABEL[format.support]}
+                    </span>
+                    <span class="mt-1.5 block text-xs text-gray-600">{format.typical}</span>
+                  </td>
+                  <td class="px-5 py-4">
+                    <span class="status" data-status="pending" data-probe={format.probe}>
+                      ○ Checking…
+                    </span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="mt-4 text-sm text-gray-500">
+      “Your browser says” uses <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">canPlayType()</code>. It only describes a type in general — the tester above is what checks your actual file.
+    </p>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" class="border-y border-gray-200 bg-white" aria-labelledby="how-heading">
+    <div class="mx-auto max-w-7xl scroll-mt-6 px-4 py-20 sm:px-6">
+      <div class="max-w-2xl">
+        <span class="eyebrow">Under the hood</span>
+        <h2 id="how-heading" class="mt-4 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">How the Video Tester Works</h2>
+        <p class="mt-4 text-lg text-gray-600">
+          It doesn’t just look at the file extension. A <code class="text-base">.mp4</code> can still be damaged or use a codec your browser can’t decode — so the tester makes your browser actually open and play the file.
+        </p>
+      </div>
+      <ol class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          howSteps.map((step, i) => (
+            <li class="card relative p-6">
+              <span class="grid size-11 place-items-center rounded-full bg-brand text-white">
+                <Icon name={step.icon} class="size-5" />
+              </span>
+              <span class="absolute top-6 right-6 text-sm font-bold text-gray-400" aria-hidden="true">
+                0{i + 1}
+              </span>
+              <h3 class="mt-4 text-lg font-bold text-gray-900">{step.title}</h3>
+              <p class="mt-2 text-gray-600">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-10 grid gap-5 lg:grid-cols-2">
+        <div class="rounded-2xl bg-warn-bg p-6 ring-1 ring-warn-line">
+          <h3 class="flex items-center gap-2 text-lg font-bold text-gray-900"><Icon name="triangle-alert" class="size-5 text-warn" /> A browser-based tester</h3>
+          <p class="mt-2 text-gray-700">
+            Results depend on the browser, operating system, container, video codec, audio codec and the browser’s codec support. A video can work in VLC but fail in a
+            browser. So a failed test means <strong class="font-bold">“this browser could not play the video”</strong> — not that the file is definitely broken.
+          </p>
+        </div>
+        <div class="rounded-2xl bg-pass-bg p-6 ring-1 ring-pass-line">
+          <h3 class="flex items-center gap-2 text-lg font-bold text-gray-900"><Icon name="shield-check" class="size-5 text-pass" /> Private by design</h3>
+          <p class="mt-2 text-gray-700">
+            Your video is processed locally in your browser. The file is not uploaded to our server — the page’s security policy blocks every way it could send data,
+            and the local object URL is released as soon as you clear the file.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto max-w-4xl scroll-mt-6 px-4 py-20 sm:px-6" aria-labelledby="faq-heading">
+    <div class="text-center">
+      <span class="eyebrow">FAQ</span>
+      <h2 id="faq-heading" class="mt-4 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">Frequently Asked Questions</h2>
+    </div>
+    <div class="mt-10 space-y-3">
+      {
+        FAQ.map((item) => (
+          <details class="card group/faq">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-5 py-4 text-left [&::-webkit-details-marker]:hidden">
+              <h3 class="text-base font-bold text-gray-900">{item.q}</h3>
+              <Icon name="chevron-down" class="size-5 shrink-0 text-gray-500 transition-transform group-open/faq:rotate-180" />
+            </summary>
+            <p class="px-5 pb-5 leading-relaxed text-gray-600">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+    <div class="mt-12 text-center">
+      <a href="#test" class="btn btn-primary btn-lg"><Icon name="cloud-upload" class="size-5" /> Test a video now</a>
+    </div>
+  </section>
+</div>

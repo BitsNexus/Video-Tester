@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import DropZone from '../components/DropZone.astro';
+import Workspace from '../components/Workspace.astro';
+import UrlWorkspace from '../components/UrlWorkspace.astro';
+import InfoSections from '../components/InfoSections.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../lib/site';
+import { FAQ } from '../data/faq';
+import { absoluteUrl } from '../lib/url';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: SITE.name,
+    url: absoluteUrl('/'),
+    description: SITE.description,
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'Any (runs in the browser)',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    publisher: { '@type': 'Organization', name: SITE.owner, url: SITE.ownerUrl },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ.map((item) => ({ '@type': 'Question', name: item.q, acceptedAnswer: { '@type': 'Answer', text: item.a } })),
+  },
+];
+
+const stats = [
+  { icon: 'eye-off', value: '0 bytes', label: 'uploaded' },
+  { icon: 'film', value: '15+ formats', label: 'MP4 to WMV' },
+  { icon: 'gauge', value: 'Real playback', label: 'not just file type' },
+];
+---
+
+<Base jsonLd={jsonLd}>
+  <Header />
+  <main id="main">
+    <div class="sky relative overflow-hidden pt-[72px] text-white">
+      <div class="mx-auto max-w-4xl px-4 pt-8 text-center sm:px-6 sm:pt-12">
+        <h1 class="text-[40px] leading-[1.1] font-semibold tracking-[-0.4px] sm:text-5xl sm:leading-[60px]">
+          <span class="text-lime-gradient">Video File Tester</span>
+        </h1>
+        <p class="mt-1 text-[32px] leading-[1.15] font-semibold tracking-[-0.4px] text-white sm:text-5xl sm:leading-[60px]">Can your browser play it?</p>
+        <p class="mx-auto mt-5 max-w-xl text-base text-white/80">
+          Drop in an MP4, WebM, MOV, MKV, AVI or WMV file — or paste a video link. We load it into your browser’s own player, read its metadata and really play it,
+          so you know if <em>this specific video</em> works (and whether any site can play the link), not just its extension.
+        </p>
+      </div>
+
+      <DropZone />
+
+      <div class="mx-auto flex justify-center px-4 pt-10 pb-16 sm:px-6" data-stats>
+        <ul class="glass grid w-full max-w-2xl grid-cols-1 gap-4 px-6 py-4 sm:grid-cols-3 sm:gap-6 sm:px-8">
+          {
+            stats.map((stat) => (
+              <li class="flex items-center gap-3">
+                <Icon name={stat.icon} class="size-6 shrink-0 text-white" />
+                <span class="leading-tight">
+                  <span class="block text-sm font-bold text-white">{stat.value}</span>
+                  <span class="block text-sm text-white/70">{stat.label}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <Workspace />
+      <UrlWorkspace />
+    </div>
+
+    <InfoSections />
+  </main>
+  <Footer />
+
+  <script>
+    import '../scripts/app';
+    import '../scripts/url-app';
+  </script>
+</Base>

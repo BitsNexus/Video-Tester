@@ -1,0 +1,179 @@
+---
+/**
+ * Results for the URL checker. Hidden until a link is checked; src/scripts/url-app.ts fills it in.
+ * Same layout as the file Workspace: info → player → results → technical details.
+ */
+import Icon from './Icon.astro';
+
+const checks = [
+  { id: 'link', label: 'Valid, secure link' },
+  { id: 'load', label: 'Loads on other sites (<video> tag)' },
+  { id: 'decode', label: 'Browser can decode video' },
+  { id: 'playback', label: 'Playback started successfully' },
+  { id: 'cors', label: 'Open to all sites without login (CORS)' },
+  { id: 'seek', label: 'Seeking works (range requests)' },
+];
+
+const infoRows = [
+  ['url', 'URL'],
+  ['host', 'Host'],
+  ['protocol', 'Protocol'],
+  ['format', 'Format (from link)'],
+  ['duration', 'Duration'],
+  ['resolution', 'Resolution'],
+  ['aspect', 'Aspect ratio'],
+  ['cors', 'Cross-origin (CORS)'],
+  ['seek', 'Seeking'],
+];
+---
+
+<section id="url-workspace" class="relative mx-auto max-w-7xl px-4 pt-10 pb-20 sm:px-6" aria-label="Video link test" hidden data-url-workspace>
+  <!-- Link bar -->
+  <div class="glass flex flex-col gap-4 p-4 text-white sm:flex-row sm:items-center sm:justify-between sm:p-5">
+    <div class="flex min-w-0 items-center gap-3">
+      <span class="grid size-11 shrink-0 place-items-center rounded-full bg-brand"><Icon name="globe" class="size-5" /></span>
+      <div class="min-w-0">
+        <p class="truncate text-base font-bold" data-u="host">—</p>
+        <p class="mt-0.5 truncate text-xs text-white/70" data-u="url"></p>
+      </div>
+      <span class="status ml-auto shrink-0 sm:ml-1" data-u="status" data-status="running">● Testing</span>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" class="btn btn-soft" data-action="url-retest"><Icon name="rotate-ccw" class="size-4" /> Test again</button>
+      <button type="button" class="btn btn-soft" data-action="url-new"><Icon name="link" class="size-4" /> Check another URL</button>
+      <button type="button" class="btn border border-white/25 text-white hover:bg-white/10" data-action="url-clear"><Icon name="x" class="size-4" /> Clear</button>
+    </div>
+  </div>
+
+  <div class="mt-5 grid gap-5 lg:grid-cols-12">
+    <!-- Link information -->
+    <section class="card min-w-0 p-5 sm:p-6 lg:col-span-5 lg:col-start-8 lg:row-start-2" aria-labelledby="url-info-heading">
+      <h2 id="url-info-heading" class="flex items-center gap-2 text-lg font-bold"><Icon name="server" class="size-5 text-brand" /> Link Information</h2>
+      <table class="kv mt-3">
+        <caption class="sr-only">Information about the video link</caption>
+        <tbody>
+          {
+            infoRows.map(([key, label]) => (
+              <tr>
+                <th scope="row">{label}</th>
+                <td data-u-info={key}>—</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Preview + playback -->
+    <section class="card min-w-0 p-5 sm:p-6 lg:col-span-7 lg:row-span-2 lg:row-start-1 lg:self-start" aria-labelledby="url-playback-heading">
+      <h2 id="url-playback-heading" class="flex items-center gap-2 text-lg font-bold"><Icon name="monitor-play" class="size-5 text-brand" /> Playback Test</h2>
+
+      <div class="relative mt-4 overflow-hidden rounded-xl bg-ink">
+        <video class="block aspect-video max-h-[65vh] w-full bg-black object-contain" controls playsinline preload="auto" hidden data-u-video aria-label="Video preview"></video>
+        <div class="grid aspect-video w-full place-items-center p-6 text-center text-white/80" data-u-placeholder>
+          <div>
+            <span class="mx-auto grid size-12 place-items-center rounded-full bg-white/10"><Icon name="globe" class="size-6 text-lime" /></span>
+            <p class="mt-3 text-sm font-medium" data-u-placeholder-text>Connecting to the video’s server…</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <button type="button" class="btn btn-primary btn-lg w-full sm:w-auto" data-action="url-play-test">
+          <Icon name="play" class="size-5" />
+          <span data-u-play-label>Start Playback Test</span>
+        </button>
+        <p class="text-sm text-gray-600" data-u-play-help>The test plays a short, muted stretch automatically.</p>
+      </div>
+
+      <p class="mt-4 rounded-xl bg-gray-50 px-4 py-3 font-mono text-xs break-words text-gray-700 ring-1 ring-gray-200 sm:text-sm" data-u-trace aria-label="Playback trace">Current time: —</p>
+
+      <div class="mt-6" hidden data-u-embed>
+        <h3 class="flex items-center gap-2 text-sm font-bold text-gray-900"><Icon name="code" class="size-4 text-brand" /> Embed it on your site</h3>
+        <p class="mt-1 text-xs text-gray-500">This link passed the playback test, so a plain HTML5 video tag works:</p>
+        <div class="mt-2 flex items-start gap-2 rounded-xl bg-ink p-3 ring-1 ring-gray-200">
+          <code class="min-w-0 flex-1 font-mono text-xs leading-relaxed break-all text-lime" data-u-embed-code></code>
+          <button type="button" class="btn shrink-0 bg-white/10 px-3 py-1.5 text-xs text-white hover:bg-white/20" data-action="url-embed-copy"><Icon name="copy" class="size-3.5" /> Copy</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="card min-w-0 overflow-hidden lg:col-span-5 lg:col-start-8 lg:row-start-1" aria-labelledby="url-results-heading">
+      <div class="p-5 sm:p-6">
+        <h2 id="url-results-heading" class="flex items-center gap-2 text-lg font-bold"><Icon name="list-checks" class="size-5 text-brand" /> Test Results</h2>
+
+        <div class="mt-4 flex items-start gap-4 rounded-2xl p-4 ring-1" data-u-verdict="testing" role="status" aria-live="polite" aria-atomic="true">
+          <span class="grid size-12 shrink-0 place-items-center rounded-full text-2xl leading-none font-bold" data-u-verdict-icon aria-hidden="true">●</span>
+          <div class="min-w-0">
+            <p class="text-xl leading-tight font-bold sm:text-2xl" data-u-verdict-title>Testing…</p>
+            <p class="mt-1 text-sm text-gray-700" data-u-verdict-message>Checking whether this link can be played from another website.</p>
+          </div>
+        </div>
+        <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-gray-700" data-u-hints hidden></ul>
+
+        <ul class="mt-5 divide-y divide-gray-100" aria-label="Individual checks">
+          {
+            checks.map((check) => (
+              <li class="flex items-start justify-between gap-3 py-2.5" data-u-check={check.id}>
+                <span class="min-w-0">
+                  <span class="block text-sm font-bold text-gray-900">{check.label}</span>
+                  <span class="mt-0.5 block text-xs text-gray-500" data-u-check-detail>
+                    Not tested
+                  </span>
+                </span>
+                <span class="status shrink-0" data-status="pending" data-u-check-status>
+                  ○ Not tested
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 border-t border-gray-100 bg-gray-50 px-5 py-4 sm:px-6">
+        <button type="button" class="btn btn-outline" data-action="url-copy"><Icon name="copy" class="size-4" /> Copy results</button>
+        <button type="button" class="btn btn-outline" data-action="url-download"><Icon name="download" class="size-4" /> Download report</button>
+        <span class="text-sm font-bold text-pass" data-u-feedback role="status" aria-live="polite"></span>
+      </div>
+      <p class="flex gap-2 border-t border-gray-100 px-5 py-4 text-xs leading-relaxed text-gray-600 sm:px-6">
+        <Icon name="info" class="mt-px size-4 shrink-0 text-gray-400" />
+        <span>
+          Tested from this page in <strong class="font-bold text-gray-900" data-u-browser>this browser</strong>, without sending a Referer — like a site embedding the video.
+          Servers can still treat specific websites differently (hotlink rules), signed links expire, and codec support varies between browsers.
+        </span>
+      </p>
+    </section>
+  </div>
+
+  <!-- Technical details -->
+  <section class="card mt-5" aria-labelledby="url-tech-heading">
+    <details class="group/tech" data-u-tech>
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-2xl p-5 sm:p-6 [&::-webkit-details-marker]:hidden">
+        <h2 id="url-tech-heading" class="flex items-center gap-2 text-lg font-bold"><Icon name="cpu" class="size-5 text-brand" /> Technical Details</h2>
+        <span class="flex items-center gap-1 text-sm font-bold text-link">
+          <span class="group-open/tech:hidden">Show</span><span class="hidden group-open/tech:inline">Hide</span>
+          <Icon name="chevron-down" class="size-4 transition-transform group-open/tech:rotate-180" />
+        </span>
+      </summary>
+      <div class="grid gap-6 border-t border-gray-100 p-5 sm:p-6 lg:grid-cols-2">
+        <div class="min-w-0">
+          <h3 class="text-sm font-bold">Element properties</h3>
+          <table class="kv kv-raw mt-2 font-mono text-xs">
+            <caption class="sr-only">Raw technical properties</caption>
+            <tbody data-u-tech-props></tbody>
+          </table>
+        </div>
+        <div class="min-w-0 space-y-6">
+          <div>
+            <h3 class="text-sm font-bold">Media event log</h3>
+            <ol class="mt-2 max-h-72 overflow-auto rounded-xl bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-700 ring-1 ring-gray-200" data-u-tech-events></ol>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold">User agent</h3>
+            <p class="mt-2 rounded-xl bg-gray-50 p-3 font-mono text-xs break-all text-gray-700 ring-1 ring-gray-200" data-u-tech-ua></p>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+</section>
