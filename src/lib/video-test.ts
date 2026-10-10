@@ -355,7 +355,7 @@ export function cleanupVideo(video: HTMLVideoElement) {
 
 export type Listener = (state: TestState) => void;
 
-export class VideoTester {
+export class Video-Tester {
   state: TestState = emptyState();
   private file: File | null = null;
   private url: string | null = null;

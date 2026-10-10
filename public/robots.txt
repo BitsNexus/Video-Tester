@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bitsnexus.github.io/VideoTester/sitemap-index.xml
+Sitemap: https://bitsnexus.github.io/Video-Tester/sitemap-index.xml

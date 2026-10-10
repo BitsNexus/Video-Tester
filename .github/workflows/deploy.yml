@@ -1,6 +1,6 @@
 name: Deploy to GitHub Pages
 
-# Builds the site and publishes it to https://bitsnexus.github.io/VideoTester/
+# Builds the site and publishes it to https://bitsnexus.github.io/Video-Tester/
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://bitsnexus.github.io' }}
-      PUBLIC_BASE_PATH: ${{ vars.PUBLIC_BASE_PATH || '/VideoTester' }}
+      PUBLIC_BASE_PATH: ${{ vars.PUBLIC_BASE_PATH || '/Video-Tester' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7

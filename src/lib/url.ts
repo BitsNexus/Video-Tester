@@ -1,6 +1,6 @@
 /**
- * URL helpers that respect the deployment base path (/VideoTester/ on GitHub Pages).
- * Always build internal links with `url()` — never hard-code "/VideoTester".
+ * URL helpers that respect the deployment base path (/Video-Tester/ on GitHub Pages).
+ * Always build internal links with `url()` — never hard-code "/Video-Tester".
  */
 
 const base = import.meta.env.BASE_URL.replace(/\/+$/, '');

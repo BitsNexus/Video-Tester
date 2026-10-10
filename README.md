@@ -1,7 +1,7 @@
 # Video File Tester
 
 Checks whether **this browser** can actually load, decode and play a local video file — entirely client-side.
-Live target: https://bitsnexus.github.io/VideoTester/ (a BitsNexus sub-site).
+Live target: https://bitsnexus.github.io/Video-Tester/ (a BitsNexus sub-site).
 
 Astro 7 + Tailwind 4 + TypeScript, <!-- styled after limewire.com --> (DM Sans, dark green hero, circular drop zone).
 
@@ -9,7 +9,7 @@ Astro 7 + Tailwind 4 + TypeScript, <!-- styled after limewire.com --> (DM Sans, 
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Dev server (`/VideoTester/`) |
+| `npm run dev` | Dev server (`/Video-Tester/`) |
 | `npm run build` / `npm run preview` | Production build (with CSP) and preview |
 | `npm run check` | Astro/TypeScript diagnostics |
 | `npm test` | Unit tests for header sniffing, diagnoses, formatting and the report |
@@ -40,7 +40,7 @@ Referer; nothing is proxied. YouTube/Vimeo/Drive/Dropbox page links get specific
 
 - `src/lib/file-info.ts` — file handling, object URLs, header read
 - `src/lib/sniff.ts` — bounded, defensive container/codec sniffer
-- `src/lib/video-test.ts` — test engine (`loadVideo`, `testVideoPlayback`, `VideoTester`, …)
+- `src/lib/video-test.ts` — test engine (`loadVideo`, `testVideoPlayback`, `Video-Tester`, …)
 - `src/lib/media-errors.ts` — MediaError / play() mapping and diagnoses
 - `src/lib/url-test.ts` — URL analysis, diagnoses and the `UrlTester`
 - `src/lib/report.ts` — copy/download text reports (file and URL)

@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 // .env files are not loaded into process.env for the config file, so read them explicitly.
 const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 
-// Deployed as a GitHub Pages *project* site: https://bitsnexus.github.io/VideoTester/
+// Deployed as a GitHub Pages *project* site: https://bitsnexus.github.io/Video-Tester/
 const site = env.PUBLIC_SITE_URL || 'https://bitsnexus.github.io';
 const base = env.PUBLIC_BASE_PATH || '/Video-Tester';
 

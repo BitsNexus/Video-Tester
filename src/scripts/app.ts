@@ -1,12 +1,12 @@
 /**
- * UI state: wires the drop zone and buttons to the VideoTester and renders its state.
+ * UI state: wires the drop zone and buttons to the Video-Tester and renders its state.
  * All text from the file (names, codec ids) goes in via textContent — never innerHTML.
  */
 import { CAN_PLAY_PROBES } from '../data/formats';
 import { liveObjectUrlCount } from '../lib/file-info';
 import { canPlayLabel, formatBytes, formatDuration, formatSeconds, getBrowserName, getOsName, NETWORK_STATES, networkStateLabel, READY_STATES, readyStateLabel } from '../lib/format';
 import { generateTestReport, VERDICT_TITLES } from '../lib/report';
-import { getPlaybackState, VideoTester, type StepStatus, type TestState } from '../lib/video-test';
+import { getPlaybackState, Video-Tester, type StepStatus, type TestState } from '../lib/video-test';
 import { $, $$, announce, CHECK_TEXT, copyWithFeedback, downloadText, fillList, fillRows, reduceMotion, renderScheduler, setText, swapClasses, TONE_LOOK } from './dom';
 import { onModeChange, setMode } from './modes';
 
@@ -21,7 +21,7 @@ const video = $<HTMLVideoElement>('[data-video]');
 const placeholder = $('[data-video-placeholder]');
 const tech = $<HTMLDetailsElement>('[data-tech]');
 
-const tester = new VideoTester(video);
+const tester = new Video-Tester(video);
 const ua = navigator.userAgent;
 const browserName = getBrowserName(ua);
 
