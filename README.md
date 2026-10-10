@@ -3,7 +3,7 @@
 Checks whether **this browser** can actually load, decode and play a local video file — entirely client-side.
 Live target: https://bitsnexus.github.io/VideoTester/ (a BitsNexus sub-site).
 
-Astro 7 + Tailwind 4 + TypeScript, styled after limewire.com (DM Sans, dark green hero, circular drop zone).
+Astro 7 + Tailwind 4 + TypeScript, <!-- styled after limewire.com --> (DM Sans, dark green hero, circular drop zone).
 
 ## Commands
 
